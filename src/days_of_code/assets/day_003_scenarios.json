@@ -1,0 +1,45 @@
+{
+  "scenario1": {
+    "intro": "You reach a fork in the road.",
+    "choose": "left or right?",
+    "choices": [
+      {
+        "choice": "right",
+        "message": "Fall into a hole.",
+        "bool": false
+      }
+    ]
+  },
+  "scenario2": {
+    "intro": "You reach a river and see a ferry in the distance.",
+    "choose": "swim or wait?",
+    "choices": [
+      {
+        "choice": "swim",
+        "message": "Attacked by trout.",
+        "bool": false
+      }
+    ]
+  },
+  "scenario3": {
+    "intro": "You arrive at three doors.",
+    "choose": "Which door?  Red, Blue, Yellow? ",
+    "choices": [
+      {
+        "choice": "yellow",
+        "message": null,
+        "bool": true
+      },
+      {
+        "choice": "red",
+        "message": "Burned by fire.",
+        "bool": false
+      },
+      {
+        "choice": "blue",
+        "message": "Eaten by beasts.",
+        "bool": false
+      }
+    ]
+  }
+}
