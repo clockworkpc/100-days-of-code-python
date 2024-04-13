@@ -17,20 +17,47 @@ class Game:
     def play(self):
         self.print_game_intro()
 
-        if self.scenario(self.scenes["s1"]) is False:
+        scenario1 = self.scenario(self.scenes["s1"])
+        if scenario1 is False:
             return self.game_over()
 
-        if self.scenario(self.scenes["s2"]) is False:
+        scenario2 = self.scenario(self.scenes["s2"])
+        if scenario2 is False:
             return self.game_over()
 
-        return self.game_over(self.scenario(self.scenes["s3"], False))
+        scenario3 = self.scenario(self.scenes["s3"], False)
+        return self.game_over(scenario3)
 
     def print_game_intro(self):
         print(self.ascii_banner)
         print("Welcome to Treasure Island.")
         print("Your mission is to find the treasure.\n")
 
-    def scenario(self, hsh, default=False):
+    def render_scene(self, description, question):
+        print(description + " ")
+        player_response = input(question + " ").strip()
+        print(f"Your choice: {player_response}")
+        return player_response
+
+    def update_messages(self, message):
+        # To avoid cluttering self.messages with None elements
+        if message is not None:
+            self.messages.append(message)
+
+    def respond_to_player(self, choices, player_response):
+        for my_dict in choices:
+            if player_response.lower() == my_dict["choice"]:
+                self.update_messages(my_dict["message"])
+                return my_dict["bool"]
+
+    def finish_scenario(self, pc_response, default_message, default_bool):
+        if pc_response is None:
+            self.update_messages(default_message)
+            return default_bool
+        else:
+            return pc_response
+
+    def scenario(self, hsh, default_bool=False):
         description, question, choices, default_message = (
             hsh["description"],
             hsh["question"],
@@ -38,29 +65,24 @@ class Game:
             hsh["default_message"],
         )
 
-        print(description + " ")
-        response = input(question + " ").strip()
-        print(f"Your choice: {response}")
+        player_response = self.render_scene(description, question)
+        pc_response = self.respond_to_player(choices, player_response)
+        return self.finish_scenario(pc_response, default_message, default_bool)
 
-        for my_dict in choices:
-            if response.lower() == my_dict["choice"]:
-                # To avoid cluttering self.messages with None elements
-                if my_dict["message"] is not None:
-                    self.messages.append(my_dict["message"])
-                return my_dict["bool"]
+    def final_message(self):
+        joined_messages = "\n".join(self.messages)
+        print(joined_messages)
+        return joined_messages
 
-        self.messages.append(default_message)
-        return default
-
-    def game_over(self, bool=False):
-        if bool is False:
+    def finalize_messages(self, bool):
+        if bool is False or None:
             self.messages.append("Game over.")
         else:
             self.messages.append("You win!")
 
-        joined_messages = "\n".join(self.messages)
-        print(joined_messages)
-        return joined_messages
+    def game_over(self, bool=False):
+        self.finalize_messages(bool)
+        return self.final_message()
 
 
 def main():
