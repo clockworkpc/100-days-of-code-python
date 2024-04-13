@@ -1,29 +1,41 @@
 {
-  "scenario1": {
-    "intro": "You reach a fork in the road.",
-    "choose": "left or right?",
+  "s1": {
+    "description": "You reach a fork in the road.",
+    "question": "left or right?",
     "choices": [
+      {
+        "choice": "left",
+        "message": null,
+        "bool": true
+      },
       {
         "choice": "right",
         "message": "Fall into a hole.",
         "bool": false
       }
-    ]
+    ],
+    "default_message": "Fall into a hole."
   },
-  "scenario2": {
-    "intro": "You reach a river and see a ferry in the distance.",
-    "choose": "swim or wait?",
+  "s2": {
+    "description": "You reach a river and see a ferry in the distance.",
+    "question": "swim or wait?",
     "choices": [
+      {
+        "choice": "wait",
+        "message": null,
+        "bool": true
+      },
       {
         "choice": "swim",
         "message": "Attacked by trout.",
         "bool": false
       }
-    ]
+    ],
+    "default_message": "Attacked by trout."
   },
-  "scenario3": {
-    "intro": "You arrive at three doors.",
-    "choose": "Which door?  Red, Blue, Yellow? ",
+  "s3": {
+    "description": "You arrive at three doors.",
+    "question": "Which door?  Red, Blue, Yellow? ",
     "choices": [
       {
         "choice": "yellow",
@@ -40,6 +52,7 @@
         "message": "Eaten by beasts.",
         "bool": false
       }
-    ]
+    ],
+    "default_message": null
   }
 }
