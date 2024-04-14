@@ -1,0 +1,26 @@
+{
+  "rock": {
+    "code": 0,
+    "results": {
+      "rock": "draw",
+      "paper": "loss",
+      "scissors": "win"
+    }
+  },
+  "paper": {
+    "code": 1,
+    "results": {
+      "rock": "win",
+      "paper": "draw",
+      "scissors": "loss"
+    }
+  },
+  "scissors": {
+    "code": 2,
+    "results": {
+      "rock": "loss",
+      "paper": "win",
+      "scissors": "draw"
+    }
+  }
+}
