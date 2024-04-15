@@ -44,57 +44,58 @@ def test_rules_scissors(game):
 
 
 def test_play_round_rock(game):
-    result = game.play_round("rock", "rock")
+    result = game.consult_the_rules("rock", "rock")
     assert result == "draw"
-    result = game.play_round("rock", "paper")
+    result = game.consult_the_rules("rock", "paper")
     assert result == "loss"
-    result = game.play_round("rock", "scissors")
+    result = game.consult_the_rules("rock", "scissors")
     assert result == "win"
 
 
 def test_play_round_paper(game):
-    result = game.play_round("paper", "rock")
+    result = game.consult_the_rules("paper", "rock")
     assert result == "win"
-    result = game.play_round("paper", "paper")
+    result = game.consult_the_rules("paper", "paper")
     assert result == "draw"
-    result = game.play_round("paper", "scissors")
+    result = game.consult_the_rules("paper", "scissors")
     assert result == "loss"
 
 
 def test_play_round_scissors(game):
-    result = game.play_round("scissors", "rock")
+    result = game.consult_the_rules("scissors", "rock")
     assert result == "loss"
-    result = game.play_round("scissors", "paper")
+    result = game.consult_the_rules("scissors", "paper")
     assert result == "win"
-    result = game.play_round("scissors", "scissors")
+    result = game.consult_the_rules("scissors", "scissors")
     assert result == "draw"
 
 
-def play_test(game, hand1, hand2, expectation):
+def single_play_test(rounds, hand1, hand2, expectation):
+    game = d.Game(rounds)
     monkeypatch = pytest.MonkeyPatch()
     inputs = iter([hand1])
     monkeypatch.setattr("builtins.input", lambda _: next(inputs))
-    result = game.play(hand2, True)
+    result = game.play(hand2)
     assert result == expectation
 
 
 def test_play_rock(game):
-    play_test(game, "0", "rock", "draw")
-    play_test(game, "0", "paper", "loss")
-    play_test(game, "0", "scissors", "win")
+    single_play_test(1, "0", "rock", "draw")
+    single_play_test(1, "0", "paper", "loss")
+    single_play_test(1, "0", "scissors", "win")
 
 
 def test_play_paper(game):
-    play_test(game, "1", "rock", "win")
-    play_test(game, "1", "paper", "draw")
-    play_test(game, "1", "scissors", "loss")
+    single_play_test(1, "1", "rock", "win")
+    single_play_test(1, "1", "paper", "draw")
+    single_play_test(1, "1", "scissors", "loss")
 
 
 def test_play_scissors(game):
-    play_test(game, "2", "rock", "loss")
-    play_test(game, "2", "paper", "win")
-    play_test(game, "2", "scissors", "draw")
+    single_play_test(1, "2", "rock", "loss")
+    single_play_test(1, "2", "paper", "win")
+    single_play_test(1, "2", "scissors", "draw")
 
 
 def test_play_error(game):
-    play_test(game, "3", "rock", None)
+    single_play_test(0, "3", "rock", None)

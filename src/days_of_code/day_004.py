@@ -16,56 +16,33 @@ class Game:
         self.rules = json.load(open(json_path, "r"))
         self.score = {"user": 0, "pc": 0}
         self.rounds = rounds
+        self.counter = 0
 
-    def play_round(self, hand1, hand2):
+    def consult_the_rules(self, hand1, hand2):
         return self.rules[hand1]["results"][hand2]
 
-    def find_key_by_code(self, target_code):
-        for key, value in self.rules.items():
-            if value["code"] == target_code:
-                return key
-        return None
-
-    def instructions(self):
-        options_ary = [
-            f"{v['code']} for {k.capitalize()}" for k, v in self.rules.items()
-        ] + ["Q for Quit"]
-        return " ".join(["Type", ", ".join(options_ary), "\nYour choice: "])
-
-    def print_hands(self, user_hand, pc_hand):
-        user_ascii_path = os.path.join(self.ascii_path, f"{user_hand}.txt")
-        user_ascii = open(user_ascii_path, "r").read()
-        pc_ascii_path = os.path.join(self.ascii_path, f"{pc_hand}.txt")
-        pc_ascii = open(pc_ascii_path, "r").read()
-        print(f"You chose: {user_hand}")
-        print(user_ascii)
-        print(f"Computer chose: {pc_hand}")
-        print(pc_ascii)
-
-    def print_outcome(self, result):
-        if result == "win":
-            print("You win!")
-        elif result == "loss":
-            print("You lose!")
-        else:
-            print("It's a draw!")
-
-    def update_score(self, result):
-        if result == "win":
-            self.score["user"] += 1
-        elif result == "loss":
-            self.score["pc"] += 1
-
-    def print_score(self):
-        print(f"You: {self.score['user']} || PC: {self.score['pc']}")
-
     def prepare_hands(self, preset_hand):
+        def instructions():
+            options_ary = []
+            for k, v in self.rules.items():
+                options_ary.append(f"{v['code']} for {k.capitalize()}")
+            options_ary.append("Q for Quit")
 
-        user_choice = input(self.instructions())
+            return " ".join(["Type", ", ".join(options_ary), "\nYour choice: "])
+
+        def find_hand_by_code(target_code):
+            for key, value in self.rules.items():
+                if value["code"] == target_code:
+                    return key
+            return None
+
+        user_choice = input(instructions())
+
         if user_choice.lower() == "q":
+            print("You QUIT")
             return ["quit", None]
 
-        user_hand = self.find_key_by_code(int(user_choice))
+        user_hand = find_hand_by_code(int(user_choice))
 
         if user_hand is None:
             print(f"USER HAND: {user_choice} --> {user_hand}")
@@ -79,94 +56,86 @@ class Game:
 
         return [user_hand, pc_hand]
 
+    def print_score(self):
+        print(f"You: {self.score['user']} || PC: {self.score['pc']}")
+
     def update_screen(self, result, user_hand, pc_hand):
-        self.update_score(result)
-        self.print_hands(user_hand, pc_hand)
-        self.print_outcome(result)
+
+        def update_score(result):
+            if result == "win":
+                self.score["user"] += 1
+            elif result == "loss":
+                self.score["pc"] += 1
+
+        def print_hands(user_hand, pc_hand):
+            user_ascii_path = os.path.join(self.ascii_path, f"{user_hand}.txt")
+            user_ascii = open(user_ascii_path, "r").read()
+            pc_ascii_path = os.path.join(self.ascii_path, f"{pc_hand}.txt")
+            pc_ascii = open(pc_ascii_path, "r").read()
+            print(f"You chose: {user_hand}")
+            print(user_ascii)
+            print(f"Computer chose: {pc_hand}")
+            print(pc_ascii)
+
+        def print_outcome(result):
+            if result == "win":
+                print("You win!")
+            elif result == "loss":
+                print("You lose!")
+            else:
+                print("It's a draw!")
+
+        update_score(result)
+        print_hands(user_hand, pc_hand)
+        print_outcome(result)
         self.print_score()
-
-    def declare_winner(self):
-        msg = {
-            self.score["user"] > self.score["pc"]: "You won the game!",
-            self.score["user"] < self.score["pc"]: "The computer won the game!",
-        }.get(True, "It's a draw!")
-
-        print(msg)
-
-    def initial_game_values(self):
-        current_result = None
-        counter = 0
-        running = True
-        return [current_result, counter, running]
 
     def start_screen(self):
         os.system("clear")
         self.print_score()
         print(f"ROUNDS: { self.rounds}")
 
-    def play_single_round(
-        self, preset_hand, current_result, counter, running, single_round
-    ):
+    def play_round(self, preset_hand, current_result):
         user_hand, pc_hand = self.prepare_hands(preset_hand)
         os.system("clear")
-        #
-        if user_hand is None and single_round:
-            print("This option does not exist.  Thanks for playing!")
-            return
 
         if user_hand is None:
             print("This option does not exist.")
-            return
+            return current_result
 
         if user_hand == "quit":
-            print("Thanks for playing!")
+            # print("Thanks for playing!")
+            self.counter = self.rounds
             return current_result
 
-        result = self.play_round(user_hand, pc_hand)
-        current_result = result
-
+        result = self.consult_the_rules(user_hand, pc_hand)
         self.update_screen(result, user_hand, pc_hand)
 
-        counter += 1
-        print(f"COUNTER: {counter}, ROUNDS: {self.rounds}")
-        if counter == self.rounds or single_round:
-            self.declare_winner()
-            print("Thanks for playing!")
-            return current_result
+        self.counter += 1
 
-    def play(self, preset_hand=None, single_round=False):
+        return result
+
+    def declare_winner(self):
+        msg = {
+            self.score["user"] > self.score["pc"]: "You won the game!",
+            self.score["user"] < self.score["pc"]: "The computer won the game!",
+        }.get(True, "No-one won the game!")
+
+        print(msg)
+        print("Thanks for playing!")
+
+    def play(self, preset_hand=None):
 
         self.start_screen()
-        current_result, counter, running = self.initial_game_values()
+        current_result = None
 
+        running = True
         while running:
-            self.play_single_round(preset_hand, single_round, *self.initial_game_values())
-            # user_hand, pc_hand = self.prepare_hands(preset_hand)
-            # os.system("clear")
-            # #
-            # if user_hand is None and single_round:
-            #     print("This option does not exist.  Thanks for playing!")
-            #     return
-            #
-            # if user_hand is None:
-            #     print("This option does not exist.")
-            #     continue
-            #
-            # if user_hand == "quit":
-            #     print("Thanks for playing!")
-            #     return current_result
-            #
-            # result = self.play_round(user_hand, pc_hand)
-            # current_result = result
-            #
-            # self.update_screen(result, user_hand, pc_hand)
-            #
-            # counter += 1
-            # print(f"COUNTER: {counter}, ROUNDS: {self.rounds}")
-            # if counter == self.rounds or single_round:
-            #     self.declare_winner()
-            #     print("Thanks for playing!")
-            #     return current_result
+            current_result = self.play_round(preset_hand, current_result)
+
+            if self.counter == self.rounds:
+                self.declare_winner()
+                return current_result
 
         return current_result
 
