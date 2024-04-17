@@ -4,9 +4,10 @@
 
 from src.days_of_code import day_007 as d
 import pytest
-import json
-import os
-import re
+
+# import json
+# import os
+# import re
 
 
 @pytest.fixture
@@ -24,7 +25,12 @@ def test_words(game):
     print(res)
 
 
-@pytest.mark.filter
 def test_stages(game):
     for i in range(0, 7):
         game.print_stage(i)
+
+
+@pytest.mark.filter
+def test_print_msg(game):
+    res = game.print_msg("lives_left", game.lives)
+    assert res == "You have 6 lives left."
