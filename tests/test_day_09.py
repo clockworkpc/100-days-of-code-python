@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-"""Tests for `day_009` package."""
+"""Tests for `day_09` package."""
 
-from src.days_of_code import day_009 as d
+from src.days_of_code import day_09 as d
 import pytest
 
 

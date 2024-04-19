@@ -9,7 +9,7 @@ class Game:
     def __init__(self):
         self.messages = []
         self.assets_path = os.path.join(os.getcwd(), "src", "days_of_code", "assets")
-        json_path = os.path.join(self.assets_path, "day_003_scenarios.json")
+        json_path = os.path.join(self.assets_path, "day_03_scenarios.json")
         self.scenes = json.load(open(json_path, "r"))
         ascii_path = os.path.join(self.assets_path, "ascii_treasure.txt")
         self.ascii_banner = open(ascii_path, "r").read()

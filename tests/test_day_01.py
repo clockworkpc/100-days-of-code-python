@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-"""Tests for `day_001` package."""
+"""Tests for `day_01` package."""
 
 import pytest
-from src.days_of_code import day_001 as d
+from src.days_of_code import day_01 as d
 
 
 def test_generate_band_name(monkeypatch):

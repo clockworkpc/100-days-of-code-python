@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
-"""Tests for `day_018` package."""
+"""Tests for `day_18` package."""
 
 from PIL import Image
 from datetime import datetime
 from pyvirtualdisplay import Display
-from src.days_of_code import day_018 as d
+from src.days_of_code import day_18 as d
 import pytest
 import turtle
 

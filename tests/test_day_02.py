@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-"""Tests for `day_002` package."""
+"""Tests for `day_02` package."""
 
 import pytest
-from src.days_of_code import day_002 as d
+from src.days_of_code import day_02 as d
 
 
 def test_total_plus_tip():

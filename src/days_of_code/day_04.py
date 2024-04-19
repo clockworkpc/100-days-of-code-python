@@ -11,7 +11,7 @@ class Game:
     def __init__(self, rounds=5):
         assets_ary = "src/days_of_code/assets".split("/")
         self.ascii_path = os.path.join(os.getcwd(), *assets_ary, "ascii")
-        json_ary = assets_ary + "json/day_004_rules.json".split("/")
+        json_ary = assets_ary + "json/day_04_rules.json".split("/")
         json_path = os.path.join(os.getcwd(), *json_ary)
         self.rules = json.load(open(json_path, "r"))
         self.score = {"user": 0, "pc": 0}
