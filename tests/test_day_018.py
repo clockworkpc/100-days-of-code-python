@@ -1,0 +1,55 @@
+#!/usr/bin/env python
+
+"""Tests for `day_018` package."""
+
+from PIL import Image
+from datetime import datetime
+from pyvirtualdisplay import Display
+from src.days_of_code import day_018 as d
+import pytest
+import turtle
+
+
+@pytest.fixture
+def timmy():
+    timmy = d.MyTurtle()
+    yield timmy
+
+
+def capture_screen(canvas, method_name):
+    timestamp = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
+    filename = f"tests/outputs/{method_name}-{timestamp}.eps"
+    canvas.postscript(file=filename)
+    img = Image.open(filename)
+    img.save(filename, "EPS")
+    return img
+
+
+def test_draw_square(timmy):
+    draw_test(timmy, "draw_square")
+
+
+def test_draw_dashed_line(timmy):
+    draw_test(timmy, "draw_dashed_line")
+
+
+def draw_test(timmy, method_name):
+    def call(method_name):
+        getattr(timmy, method_name)()
+
+        canvas = timmy.set_up_screen().getcanvas()
+
+        call(method_name)
+        before_img = capture_screen(canvas, method_name)
+        call(method_name)
+        after_img = capture_screen(canvas, method_name)
+        assert_images_equal(before_img, after_img)
+
+
+# def test_draw_dashed_line(timmy):
+#     canvas = timmy.canvas
+
+
+def assert_images_equal(img1, img2):
+    assert img1.size == img2.size
+    assert list(img1.getdata()) == list(img2.getdata())
