@@ -30,7 +30,6 @@ def test_stages(game):
         game.print_stage(i)
 
 
-@pytest.mark.filter
 def test_print_msg(game):
     res = game.print_msg("lives_left", game.lives)
     assert res == "You have 6 lives left."

@@ -40,7 +40,6 @@ def auction1(bids0):
     yield a
 
 
-@pytest.mark.filter
 @pytest.mark.parametrize(
     "bid, status",
     [

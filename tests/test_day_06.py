@@ -23,7 +23,6 @@ def open_position():
     yield {"x": 4, "y": 3}
 
 
-# @pytest.mark.filter
 def test_move_east(world_path, open_position):
     g = d.Reeborg(world_path, open_position, "east")
     g.move()
